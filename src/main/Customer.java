@@ -1,4 +1,4 @@
-package bad.robot.refactoring.chapter1;
+package main;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,7 +49,7 @@ public class Customer {
     private int getTotalFrequentRenterPoints() {
         int total = 0;
         for (Rental rental : rentals)
-            total += rental.getFrequentRenterPoints();
+            total += (rental).getFrequentRenterPoints();
         return total;
     }
 

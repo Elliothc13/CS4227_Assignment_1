@@ -1,4 +1,4 @@
-package bad.robot.refactoring.chapter1;
+package main;
 
 public class NewReleasePrice extends Price {
 
