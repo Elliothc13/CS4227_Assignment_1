@@ -1,5 +1,5 @@
 package main;
 
-public class Interceptor {
-
+public interface Interceptor {
+    void apply(ContextObject context);
 }
