@@ -5,6 +5,9 @@ import org.junit.Test;
 import main.Customer;
 import main.Movie;
 import main.Rental;
+import main.ConcreteInterceptor;
+import main.ContextObject;
+import main.Interceptor;
 
 import static org.junit.Assert.assertEquals;
 
@@ -58,6 +61,32 @@ public class MovieRentalTest {
         customer.addRental(new Rental(SPIDER_MAN, 1));
         customer.addRental(new Rental(IRON_MAN, 3));
         assertEquals("Rental record for fred\n\tThe Hulk\t1.5\n\tSpiderman\t2.0\n\tIron Man 4\t9.0\nAmount owed is 12.5\nYou earned 4 frequent renter points", customer.statement());
+    }
+    
+    @Test
+    public void testDiscountInterceptorNoDiscount() {
+        Rental rental = new Rental(new Movie("UP", Movie.NEW_RELEASE), 5);
+        ContextObject context = new ContextObject(rental);
+
+        Interceptor interceptor = new ConcreteInterceptor();
+        interceptor.apply(context);
+
+        double expectedAmount = rental.getCharge();
+        double actualAmount = context.getAmount();
+        assertEquals(expectedAmount, actualAmount, 0.001);
+    }
+    
+    @Test
+    public void testDiscountInterceptorDiscount() {
+        Rental rental = new Rental(new Movie("Blade Runner", Movie.NEW_RELEASE), 14);
+        ContextObject context = new ContextObject(rental);
+
+        Interceptor interceptor = new ConcreteInterceptor();
+        interceptor.apply(context);
+
+        double expectedAmount = rental.getCharge() * 0.5;
+        double actualAmount = context.getAmount();
+        assertEquals(expectedAmount, actualAmount, 0.001);
     }
     
     private static String expectedMessageFor(String rental, double price, double total, int renterPointsEarned) {
