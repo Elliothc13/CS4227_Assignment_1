@@ -34,7 +34,7 @@ public class Movie {
         }
     }
 
-    private int getPriceCode() {
+    public int getPriceCode() {
         return price.getPriceCode();
     }
 

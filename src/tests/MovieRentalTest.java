@@ -3,9 +3,9 @@ package tests;
 import org.junit.Test;
 
 import main.Customer;
+import main.Dispatcher;
 import main.Movie;
 import main.Rental;
-import main.ConcreteInterceptor;
 import main.ContextObject;
 import main.Interceptor;
 
@@ -68,8 +68,8 @@ public class MovieRentalTest {
         Rental rental = new Rental(new Movie("UP", Movie.NEW_RELEASE), 5);
         ContextObject context = new ContextObject(rental);
 
-        Interceptor interceptor = new ConcreteInterceptor();
-        interceptor.apply(context);
+        Dispatcher dispatcher = new Dispatcher();
+        dispatcher.dispatch(context);
 
         double expectedAmount = rental.getCharge();
         double actualAmount = context.getAmount();
@@ -77,14 +77,40 @@ public class MovieRentalTest {
     }
     
     @Test
-    public void testDiscountInterceptorDiscount() {
+    public void testDiscountInterceptorDiscountNewRelease() {
         Rental rental = new Rental(new Movie("Blade Runner", Movie.NEW_RELEASE), 14);
         ContextObject context = new ContextObject(rental);
 
-        Interceptor interceptor = new ConcreteInterceptor();
-        interceptor.apply(context);
+        Dispatcher dispatcher = new Dispatcher();
+        dispatcher.dispatch(context);
 
-        double expectedAmount = rental.getCharge() * 0.5;
+        double expectedAmount = rental.getCharge() - rental.getCharge() * 0.2;
+        double actualAmount = context.getAmount();
+        assertEquals(expectedAmount, actualAmount, 0.001);
+    }
+    
+    @Test
+    public void testDiscountInterceptorDiscountRegularPrice() {
+        Rental rental = new Rental(new Movie("Django Unchained", Movie.REGULAR), 14);
+        ContextObject context = new ContextObject(rental);
+
+        Dispatcher dispatcher = new Dispatcher();
+        dispatcher.dispatch(context);
+
+        double expectedAmount = rental.getCharge() - rental.getCharge() * 0.5;
+        double actualAmount = context.getAmount();
+        assertEquals(expectedAmount, actualAmount, 0.001);
+    }
+    
+    @Test
+    public void testDiscountInterceptorDiscountChildrenPrice() {
+        Rental rental = new Rental(new Movie("Cinderella", Movie.CHILDREN), 14);
+        ContextObject context = new ContextObject(rental);
+
+        Dispatcher dispatcher = new Dispatcher();
+        dispatcher.dispatch(context);
+
+        double expectedAmount = rental.getCharge() - rental.getCharge() * 1;
         double actualAmount = context.getAmount();
         assertEquals(expectedAmount, actualAmount, 0.001);
     }

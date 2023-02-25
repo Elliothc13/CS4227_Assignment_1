@@ -7,7 +7,9 @@ public class Dispatcher {
     private List<Interceptor> interceptors = new ArrayList<>();
 
     public Dispatcher() {
-    	interceptors.add(new ConcreteInterceptor());
+    	interceptors.add(new ConcreteInterceptorPrice());
+    	interceptors.add(new ConcreteInterceptorChildrenPrice());
+    	interceptors.add(new ConcreteInterceptorNewReleasePrice());
     }
 
     public void dispatch(ContextObject context) {
